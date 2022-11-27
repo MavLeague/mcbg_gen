@@ -10,7 +10,7 @@ import webbrowser
 target = ""
 imageFiles = ["Empty","Empty","Empty","Empty","Empty","Empty"]
 keyboard = Controller()
-InfoText = "1. Set the Resolution of your Instance to a 1:1 Ratio (e.g. 512x512 or 1024x1024). \n2. Make sure your Instance is in Window Mode! \n3. Set your FOV to 82. \n4. Remove all Effects that influence the view! (e.g. Speed, Nausea, Slowness, etc.) \n5. (Open your World and) Go to a suitable place. This will be the Center of your Background! \n6. Press the \"Take Screenshots\"-Button and wait 7 Seconds! \n7. Open your Screenshots-Folder. Then Drag and Drop the taken Screenshots in order in the \"Source\"-Inputs so the Path appears in it. \n8. Choose the Background Folder in your Resourcepack and Drag and Drop it in the \"Target File\"-Input so the Path appears in it. \n9. Click \"Create Files\" and the files should appear in the chosen Folder."
+InfoText = "01. Set the Resolution of your Instance to a 1:1 Ratio (e.g. 512x512 or 1024x1024). \n02. Make sure your Instance is in Window Mode! \n03. Set your FOV to 82. \n04. Remove all Effects that influence the view! (e.g. Speed, Nausea, Slowness, etc.) \n05. (Open your World and) Go to a suitable place. This will be the Center of your Background! \n06. Press F1 to hide the Gui! (e.g. Hotbar) \n07. Press the \"Take Screenshots\"-Button and wait 7 Seconds! \n08. Open your Screenshots-Folder. Then Drag and Drop the taken Screenshots in order in the \"Source\"-Inputs so the Path appears in it. \n09. Choose the Background Folder in your Resourcepack and Drag and Drop it in the \"Target File\"-Input so the Path appears in it. \n10. Click \"Create Files\" and the files should appear in the chosen Folder."
 TutorialVideo = "http://example.com"
 Font = "Segoe UI"
 Font_size = 10
