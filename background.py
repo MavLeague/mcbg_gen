@@ -1,9 +1,10 @@
 from pynput.keyboard import Key, Controller
-from PIL import Image, ImageTk
+#from PIL import Image, ImageTk
 import PySimpleGUIQt as gui
 import shutil
 import time
 import webbrowser
+import os
 
 
 # --define Values--
@@ -14,6 +15,8 @@ InfoText = "01. Set the Resolution of your Instance to a 1:1 Ratio (e.g. 512x512
 TutorialVideo = "http://example.com"
 Font = "Segoe UI"
 Font_size = 10
+icon_path = "assets/icon.ico"
+
 
 # --set GUI--
 gui.ChangeLookAndFeel('Default')
@@ -151,10 +154,17 @@ layout= [
     ]
 ]
 
-#create the Window
-window= gui.Window("Set Background Images", layout,size=(600, 600))
-
 # --define all Functions--
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def presskey(key):
     keyboard.press(key)
@@ -202,6 +212,9 @@ def takescreenshots():
     presskey(Key.enter)
     time.sleep(0.05)
     presskey(Key.f2)
+
+#create the Window
+window= gui.Window("Set Background Images", layout,size=(600, 600), icon=resource_path(icon_path))
 
 # --Event Loop--
 while True:
