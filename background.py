@@ -25,7 +25,7 @@ top_column= [
     [gui.Text("Need Help? Here is a Tutorial Video!", text_color="#0000EE", font= (Font, Font_size, "underline"), tooltip = f"Open: {TutorialVideo}", enable_events= True, key= "TUTORIAL_LINK")],
     [
     gui.Checkbox("show Images", key="SHOW_HIDE_IMAGE", default= True, enable_events= True),
-    gui.Button("Take Screenshots\n(6 Second delay)", key="SCREENSHOTS", size=(150, 50)),
+    gui.Button("Take Screenshots\n(6 Second delay)", key="SCREENSHOTS", size=(None, None)),
     gui.Column([[
         gui.Text("Starting in: -", key="TIMER", visible=False, size=(150, 30))
     ]])
