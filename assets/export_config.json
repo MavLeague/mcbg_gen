@@ -7,7 +7,7 @@
   },
   {
    "optionDest": "filenames",
-   "value": "C:/Users/tilfa/Documents/GitHub/mcbg_gen/background.py"
+   "value": "C:/Users/#/Documents/GitHub/mcbg_gen/background.py"
   },
   {
    "optionDest": "onefile",
@@ -19,7 +19,7 @@
   },
   {
    "optionDest": "icon_file",
-   "value": "C:/Users/tilfa/Documents/GitHub/mcbg_gen/assets/icon.ico"
+   "value": "C:/Users/#/Documents/GitHub/mcbg_gen/assets/icon.ico"
   },
   {
    "optionDest": "ascii",
@@ -71,7 +71,7 @@
   },
   {
    "optionDest": "datas",
-   "value": "C:/Users/tilfa/Documents/GitHub/mcbg_gen/assets/icon.ico;assets/"
+   "value": "C:/Users/#/Documents/GitHub/mcbg_gen/assets/icon.ico;assets/"
   }
  ],
  "nonPyinstallerOptions": {
