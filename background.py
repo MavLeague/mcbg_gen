@@ -1,19 +1,22 @@
 from pynput.keyboard import Key, Controller
-from PIL import Image, ImageTk
+#from PIL import Image, ImageTk
 import PySimpleGUIQt as gui
 import shutil
 import time
 import webbrowser
+import os
 
 
 # --define Values--
 target = ""
 imageFiles = ["Empty","Empty","Empty","Empty","Empty","Empty"]
 keyboard = Controller()
-InfoText = "1. Set the Resolution of your Instance to a 1:1 Ratio (e.g. 512x512 or 1024x1024). \n2. Make sure your Instance is in Window Mode! \n3. Set your FOV to 82. \n4. Remove all Effects that influence the view! (e.g. Speed, Nausea, Slowness, etc.) \n5. (Open your World and) Go to a suitable place. This will be the Center of your Background! \n6. Press the \"Take Screenshots\"-Button and wait 7 Seconds! \n7. Open your Screenshots-Folder. Then Drag and Drop the taken Screenshots in order in the \"Source\"-Inputs so the Path appears in it. \n8. Choose the Background Folder in your Resourcepack and Drag and Drop it in the \"Target File\"-Input so the Path appears in it. \n9. Click \"Create Files\" and the files should appear in the chosen Folder."
+InfoText = "01. Set the Resolution of your Instance to a 1:1 Ratio (e.g. 512x512 or 1024x1024). \n02. Make sure your Instance is in Window Mode! \n03. Set your FOV to 82. \n04. Remove all Effects that influence the view! (e.g. Speed, Nausea, Slowness, etc.) \n05. (Open your World and) Go to a suitable place. This will be the Center of your Background! \n06. Press F1 to hide the Gui! (e.g. Hotbar) \n07. Press the \"Take Screenshots\"-Button and wait 7 Seconds! \n08. Open your Screenshots-Folder. Then Drag and Drop the taken Screenshots in order in the \"Source\"-Inputs so the Path appears in it. \n09. Choose the Background Folder in your Resourcepack and Drag and Drop it in the \"Target File\"-Input so the Path appears in it. \n10. Click \"Create Files\" and the files should appear in the chosen Folder."
 TutorialVideo = "http://example.com"
 Font = "Segoe UI"
 Font_size = 10
+icon_path = "assets/icon.ico"
+
 
 # --set GUI--
 gui.ChangeLookAndFeel('Default')
@@ -151,10 +154,17 @@ layout= [
     ]
 ]
 
-#create the Window
-window= gui.Window("Set Background Images", layout,size=(600, 600))
-
 # --define all Functions--
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def presskey(key):
     keyboard.press(key)
@@ -202,6 +212,9 @@ def takescreenshots():
     presskey(Key.enter)
     time.sleep(0.05)
     presskey(Key.f2)
+
+#create the Window
+window= gui.Window("Set Background Images", layout,size=(600, 600), icon=resource_path(icon_path))
 
 # --Event Loop--
 while True:
