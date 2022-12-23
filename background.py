@@ -12,6 +12,8 @@ target = ""
 keyboard = Controller()
 InfoText = "01. Set the Resolution of your Instance to a 1:1 Ratio (e.g. 512x512 or 1024x1024). \n02. Make sure your Instance is in Window Mode! \n03. Set your FOV to 82. \n04. Remove all Effects that influence the view! (e.g. Speed, Nausea, Slowness, etc.) \n05. (Open your World and) Go to a suitable place. This will be the Center of your Background! \n06. Press F1 to hide the Gui! (e.g. Hotbar) \n07. Press the \"Take Screenshots\"-Button and wait 7 Seconds! \n08. Open your Screenshots-Folder. Then Drag and Drop the taken Screenshots in order in the \"Source\"-Inputs so the Path appears in it. \n09. Choose the Background Folder in your Resourcepack and Drag and Drop it in the \"Target File\"-Input so the Path appears in it. \n10. Click \"Create Files\" and the files should appear in the chosen Folder."
 TutorialVideo = "http://example.com"
+tutorial_visibility = False
+
 Font = "Segoe UI"
 Font_size = 10
 icon_path = "assets/icon.ico"
@@ -21,6 +23,7 @@ image_visibility = False
 image_size = (120, 120)
 image_files = []
 
+menu_image = ("&Images  ✓::SHOW_HIDE_IMAGE", "&Images::SHOW_HIDE_IMAGE")
 
 x = image_count
 while x > 0:
@@ -33,6 +36,10 @@ gui.ChangeLookAndFeel('Default')
 
 
 # --define all Functions--
+def menukey(string):
+    # removes everything till the '::' of a string
+    string = string[string.find("::") + 2:]
+    return string
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -120,6 +127,11 @@ def takescreenshots():
     presskey(Key.f2)
 
 
+#menu bar
+menu_def= [
+    ["&Visible", ["&Tutorial::SHOW_HIDE_TUTORIAL", menu_image[1]]]
+]
+
 
 #top column
 top_column= [
@@ -127,7 +139,6 @@ top_column= [
     [gui.Text(InfoText, font= (Font, Font_size))],
     [gui.Text("Need Help? Here is a Tutorial Video!", text_color="#0000EE", font= (Font, Font_size, "underline"), tooltip = f"Open: {TutorialVideo}", enable_events= True, key= "TUTORIAL_LINK")],
     [
-    gui.Checkbox("show Images", key="SHOW_HIDE_IMAGE", default= image_visibility, enable_events= True),
     gui.Button("Take Screenshots\n(6 Second delay)", key="SCREENSHOTS", size=(None, None)),
     gui.Column([[
         gui.Text("Starting in: -", key="TIMER", visible=False, size=(150, 30))
@@ -136,7 +147,9 @@ top_column= [
 ]
 
 #left column
-image_column= []
+image_column= [
+#    [gui.Checkbox("show Images", key="SHOW_HIDE_IMAGE", default= image_visibility, enable_events= True)]
+]
 
 #right column
 name_column= [
@@ -184,9 +197,10 @@ feet_column=[
 addtolist(image_count, image_column, "IMAGE", "SOURCE")
 
 layout= [
-    [gui.Column([        
+    [gui.Menu(menu_def, key= "MENUBAR"),
+     gui.Column([        
         [
-        gui.Column(top_column)
+        gui.Column(top_column, key= "TOP_COLUMN", visible=tutorial_visibility)
         ],
         [
             gui.Column(image_column),
@@ -204,12 +218,19 @@ layout= [
 ]
 
 #create the Window
-window= gui.Window("Set Background Images", layout, icon=resource_path(icon_path))
+window= gui.Window(
+    "Set Background Images", 
+    layout, 
+    icon=resource_path(icon_path), 
+    element_justification='c'
+)
 
 # --Event Loop--
 while True:
     x = 0
     event, values= window.read()
+
+    print(event)
 
     #close gui
     if event == gui.WIN_CLOSED or event == "STOP":
@@ -220,17 +241,28 @@ while True:
         if event == f"SOURCE_{x}":
             source = values[f"SOURCE_{x}"]
 
-            window[f"IMAGE_{x}"].update(filename= source, size= image_size)
-            window[f"SOURCE_{x}"].update(source)
-            image_files[x] = source
-
-
-            #debug
-            print(f"Updated {x} with {source}")
-            print(f"Updated List!:")
-            for x in range(len(image_files)):
-                print(f"Image {x}: {image_files[x]}")
-            print("")
+            # update if path is valid
+            if os.path.exists(source):
+                window[f"IMAGE_{x}"].update(filename= source, size= image_size)
+                window[f"SOURCE_{x}"].update(source)
+                image_files[x] = source
+                
+                #debug
+                print(f"Updated {x} with {source}")
+                print(f"Updated List!:")
+                for x in range(len(image_files)):
+                    print(f"Image {x}: {image_files[x]}")
+                print("")
+                window[f"SOURCE_{x}"].update(text_color= "#000000")
+                
+            else:
+                # lock typing
+                if not image_files[x] == "Empty":
+                    window[f"SOURCE_{x}"].update(image_files[x])
+                elif image_files[x] == "Empty":
+                    window[f"SOURCE_{x}"].update("")
+                
+                window[f"SOURCE_{x}"].update(text_color= "#660000")
 
             x = 0
             break
@@ -261,12 +293,33 @@ while True:
 
 
 
-    if event == "SHOW_HIDE_IMAGE":
-        state = values["SHOW_HIDE_IMAGE"]
+    if menukey(event) == "SHOW_HIDE_IMAGE":
+        state = not image_visibility
         x = 0
+        print("Images", state)
         while x < image_count:
-            window[f"IMAGE_{x}"].update(visible= state, size= image_size, zoom= (1/ average(image_size)))
+            window[f"IMAGE_{x}"].update(visible= state, size= image_size)
             x = x + 1
+        
+        if state:
+            window[1].update(menu_image[0])
+        elif not state:
+            window[1].update(menu_image[1])
+        
+        
+        image_visibility = state
+
+    if menukey(event) == "SHOW_HIDE_TUTORIAL":
+        state = not tutorial_visibility
+        window["TOP_COLUMN"].update(visible= state)
+        
+        if state:
+            window[1].update(menu_image[0])
+        elif not state:
+            window[1].update(menu_image[1])
+        
+        
+        tutorial_visibility = state
 
     if event == "SCREENSHOTS":
         time.sleep(6)
