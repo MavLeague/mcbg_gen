@@ -330,9 +330,11 @@ while True:
 
             x = 0
             for x in range(len(list_return)):
-                image_files[x] = list_return[x]
-
-
+                source = list_return[x]
+                if os.path.exists(source):
+                    main_window[f"IMAGE_{x}"].update(data=convert_to_bytes(source, image_size))
+                    main_window[f"SOURCE_{x}"].update(source)
+                    image_files[x] = source
 
             x = 0
             print(f"Updated List!:")
