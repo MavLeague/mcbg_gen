@@ -7,7 +7,16 @@ import shutil
 import time
 import webbrowser
 import os
+import json
 
+
+# --read config Function--
+def read_config(file, var):
+    config = open(file,"r")
+    data = json.load(f)
+    result = data[var]
+    config.close()
+    return result
 
 # --define Values--
 target = ""
