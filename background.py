@@ -72,19 +72,19 @@ def typekey(text):
     text = list(text)
     for x in text:
         presskey(x)
-        
+
 def average(l):
     count = 0
 
     for x in l:
         count = count + x
         return count
-    
+
     result = count/len(l)
     return result
 
 def addtolist(x, list, imagekey, sourcekey):
-    
+
     x = x - 1
     # create for every x a new image element
     while x >= 0:
@@ -93,7 +93,7 @@ def addtolist(x, list, imagekey, sourcekey):
             gui.Column(
                 [
                     [gui.Text("Source:")],
-                    [gui.InputText(enable_events= True, size= (15 , None),key= f"{sourcekey}_{x}"), 
+                    [gui.InputText(enable_events= True, size= (15 , None),key= f"{sourcekey}_{x}"),
                      gui.FileBrowse(enable_events= True, file_types= (("PNG-Images", "*.png"),))]
                 ])]
         list.insert(0, input)
@@ -102,7 +102,7 @@ def addtolist(x, list, imagekey, sourcekey):
 
 
 def takescreenshots(list, delay = 0.05):
-    
+
     for command in list:
         time.sleep(delay)
         presskey("t")
@@ -111,8 +111,8 @@ def takescreenshots(list, delay = 0.05):
         presskey(Key.enter)
         time.sleep(delay)
         presskey(Key.f2)
-        
-        
+
+
 def convert_to_list(string, seperator= ";"):
     print("")
     result = []
@@ -120,7 +120,7 @@ def convert_to_list(string, seperator= ";"):
         sepos = string.find(seperator)
         result.append(string[0:sepos])
         string = string[sepos + 1:]
-        
+
     result.append(string)
     return result
 
@@ -229,7 +229,7 @@ addtolist(image_count, image_column, "IMAGE", "SOURCE")
 
 layout= [
     [gui.Menu(menu_def, key= "MENUBAR"),
-     gui.Column([        
+     gui.Column([
         #[gui.Column(tutorial_column, key= "TOP_COLUMN", visible=tutorial_visibility)],
         [
             gui.Column(image_column),
@@ -248,9 +248,9 @@ layout= [
 
 #create the Window
 main_window= gui.Window(
-    "Set Background Images", 
-    layout, 
-    icon=resource_path(icon_path), 
+    "Set Background Images",
+    layout,
+    icon=resource_path(icon_path),
     element_justification='c'
 )
 
@@ -272,11 +272,10 @@ while True:
 
             # update if path is valid
             if os.path.exists(source):
-                bite_source = convert_to_bytes(source, image_size)
-                main_window[f"IMAGE_{x}"].update(bite_source, size= image_size)
+                main_window[f"IMAGE_{x}"].update(data=convert_to_bytes(source, image_size))
                 main_window[f"SOURCE_{x}"].update(source)
                 image_files[x] = source
-                
+
                 #debug
                 print(f"Updated {x} with {source}")
                 print(f"Updated List!:")
@@ -284,14 +283,14 @@ while True:
                     print(f"Image {x}: {image_files[x]}")
                 print("")
                 main_window[f"SOURCE_{x}"].update(text_color= "#000000")
-                
+
             else:
                 # lock typing
                 if not image_files[x] == "Empty":
                     main_window[f"SOURCE_{x}"].update(image_files[x])
                 elif image_files[x] == "Empty":
                     main_window[f"SOURCE_{x}"].update("")
-                
+
                 main_window[f"SOURCE_{x}"].update(text_color= "#660000")
 
             x = 0
@@ -321,20 +320,20 @@ while True:
         else:
             print("please insert target Folder!")
 
-    
+
     if menukey(main_event) == "IMPORT_IMAGES":
         print("Values:", main_values["IMPORT_IMAGES"])
-        
-                
+
+
         list_return = convert_to_list(main_values["IMPORT_IMAGES"])
         if len(list_return) <= image_count:
-            
+
             x = 0
             for x in range(len(list_return)):
                 image_files[x] = list_return[x]
-                
-                
-            
+
+
+
             x = 0
             print(f"Updated List!:")
             for x in range(len(image_files)):
@@ -349,36 +348,36 @@ while True:
         while x < image_count:
             main_window[f"IMAGE_{x}"].update(visible= state, size= image_size)
             x = x + 1
-        
+
         if state:
             main_window[1].update(menu_image[0])
         elif not state:
             main_window[1].update(menu_image[1])
-        
-        
+
+
         image_visibility = state
 
     if not tutorial_visibility and menukey(main_event) == "SHOW_HIDE_TUTORIAL":
         tutorial_visibility = True
         # show Tutorial window
         Tutorial = gui.Window("Tutorial", tutorial_column)
-        
+
         #state = not tutorial_visibility
         #main_window["TOP_COLUMN"].update(visible= state)
-        
+
         #if state:
         #    main_window[1].update(menu_image[0])
         #elif not state:
         #    main_window[1].update(menu_image[1])
         #tutorial_visibility = state
 
-    # events for Tutorial Window 
+    # events for Tutorial Window
     if tutorial_visibility:
         tutorial_event, tutorial_values = Tutorial.read()
         if tutorial_event == gui.WIN_CLOSED or tutorial_event == 'Exit':
             tutorial_visibility  = False
             print("Visibility set to", tutorial_visibility)
-            Tutorial.close() 
+            Tutorial.close()
 
     if main_event == "SCREENSHOTS":
         time.sleep(6)
