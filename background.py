@@ -119,7 +119,7 @@ def convert_to_list(string, seperator= ";"):
     for x in range(string.count(seperator)):
         sepos = string.find(seperator)
         result.append(string[0:sepos])
-        string = string[sepos + 1:]
+        string = string[sepos + len(seperator):]
         
     result.append(string)
     return result
